@@ -1,2 +1,9 @@
-.vscode/settings.json
-.ipynb_checkpoints/sanushi-checkpoint.ipynb
+_pycache__/
+.ipynb_checkpoints/*
+.vscode/*
+output/
+train/
+validation/
+sushi_or_sandwich*
+*.pyc
+*.h5
