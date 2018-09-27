@@ -16,7 +16,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 import keras
-import h5py
 
 from keras.preprocessing.image import ImageDataGenerator
 from keras.models import Sequential, Model
@@ -78,7 +77,7 @@ def load_data():
             ])))
 
 def process_data():
-    """ Create the training and validation sets and return the augmented generators """
+    """ Create the training and validation sets and return the image generators """
     # Split the data into training and validation sets (not enough data for 3 partitions)
 
     # remove existing sets
@@ -124,28 +123,12 @@ def process_data():
 
     val_datagen = ImageDataGenerator(rescale=1 / 255)
 
-    print('Image generators:')
-
-    train_generator = train_datagen.flow_from_directory(
-        TRAIN_DIR,
-        target_size=(IMG_HEIGHT, IMG_WIDTH),
-        batch_size=batch_size,
-        class_mode="binary",
-    )
-
-    val_generator = val_datagen.flow_from_directory(
-        VALIDATION_DIR,
-        target_size=(IMG_HEIGHT, IMG_WIDTH),
-        batch_size=batch_size,
-        class_mode="binary",
-    )
-
-    return train_datagen, val_datagen, train_generator, val_generator 
+    return train_datagen, val_datagen
 
 # Build and train the Neural Network model
 # Load a well-known model pretrained on Imagenet dataset (only convolutional layers)
 
-def get_bottleneck(train_datagen, val_datagen, train_generator, val_generator):
+def get_bottleneck(train_datagen, val_datagen):
     model_bottleneck = keras.applications.MobileNet(
         weights='imagenet',
         include_top=False,
@@ -155,7 +138,7 @@ def get_bottleneck(train_datagen, val_datagen, train_generator, val_generator):
         layer.trainable = False
 
     # Get bottleneck features
-
+    print('Image generators:')
     train_bottleneck_generator = train_datagen.flow_from_directory(
         TRAIN_DIR,
         color_mode='rgb',
@@ -178,13 +161,11 @@ def get_bottleneck(train_datagen, val_datagen, train_generator, val_generator):
         train_bottleneck_generator, verbose=1)
     val_bottleneck = model_bottleneck.predict_generator(
         val_bottleneck_generator, verbose=1)
-    train_labels = train_generator.classes
-    val_labels = val_generator.classes
+    train_labels = train_bottleneck_generator.classes
+    val_labels = val_bottleneck_generator.classes
 
-    return model_bottleneck, train_bottleneck,val_bottleneck
+    return  model_bottleneck, train_bottleneck, val_bottleneck, train_labels, val_labels
     # #Biuld a final fully connected classifier
-
-model = None
 
 
 def build_top_nn(summary=False):
@@ -275,13 +256,25 @@ def build_full_model(model_bottleneck, model_top):
 #
 # ### Show and save potential dishes: pictures misclassified or with output (sigmoid) $\in$ (0.45, 0.55). Only the validation set is used here to avoid trained samples
 
-def predict_and_save_potential_dishes(full_model, val_generator):
+def predict_and_save_potential_dishes(full_model, val_datagen):
+
+    plt.rcParams.update({'figure.max_open_warning': 0})
+
     if os.path.isdir(OUTPUT_DIR):
         shutil.rmtree(OUTPUT_DIR)
 
     os.makedirs(OUTPUT_DIR)
 
+
     print("Potential combinations of Sandwich and Sushi:")
+
+    val_generator = val_datagen.flow_from_directory(
+        VALIDATION_DIR,
+        target_size=(IMG_HEIGHT, IMG_WIDTH),
+        batch_size=batch_size,
+        class_mode="binary",
+    )
+
 
     n = 0
     for i in range(len(val_generator)):
@@ -303,11 +296,10 @@ def predict_and_save_potential_dishes(full_model, val_generator):
 if __name__ == '__main__':
     setup()
     load_data()
-    train_datagen, val_datagen, train_generator, val_generator = process_data()
-    model_bottleneck, train_bottleneck, val_bottleneck = get_bottleneck(
-        train_datagen, val_datagen, train_generator, val_generator)
+    train_datagen, val_datagen = process_data()
+    model_bottleneck, train_bottleneck, val_bottleneck, train_labels, val_labels = get_bottleneck(
+        train_datagen, val_datagen)
     model_top = build_top_nn(summary=True)
-    model_top = train_nn(model_top, train_bottleneck,val_bottleneck, train_generator.classes, val_generator.classes)
-    print(train_generator.classes)
+    model_top = train_nn(model_top, train_bottleneck,val_bottleneck, train_labels, val_labels)
     full_model = build_full_model(model_bottleneck, model_top)
-    predict_and_save_potential_dishes(full_model, val_generator)
+    predict_and_save_potential_dishes(full_model, val_datagen)
