@@ -72,7 +72,7 @@ def show_training(history):
         plt.xlabel('epoch')
         plt.ylabel('accuracy')
         plt.legend()
-    
+
     plt.suptitle("Training history")
     plt.show()
 
