@@ -42,7 +42,7 @@ VALIDATION_DIR = "validation"
 OUTPUT_DIR = "output"  # potential dishes will be saved here
 
 # main parameters (already tuned)
-SEED = 0 # seed for random values (train-validation split, initial values of NN weigths ...)
+SEED = 0  # seed for random values (train-validation split, initial NN weigths ...)
 IMG_WIDTH, IMG_HEIGHT = 224, 224  # match with input sizes of pretrained network
 VALIDATION_SIZE = 0.3  # size the of validation set
 BATCH_SIZE = 32

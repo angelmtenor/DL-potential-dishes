@@ -1,8 +1,8 @@
 """
 Redcued helper module imported from the Data-Science-Keras repository
 """
-#import os, warnings
-#warnings.simplefilter(action="ignore", category=FutureWarning)
+# import os, warnings
+# warnings.simplefilter(action="ignore", category=FutureWarning)
 
 import os
 import random as rn
