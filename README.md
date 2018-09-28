@@ -1,4 +1,4 @@
-# Deep Learning Technical Assignment: Identify potential combination of dishes
+ Deep Learning assignment: Identify potential combinations of dishes
 
 ## 1 - Goal
 
@@ -6,11 +6,11 @@
 
 ## 2. Description 
 
-<b> Methodology </b>: Use transfer Learning: build, train and validate several custom and pretrained convolutional networks. Select the best model (highest validation accuracy) and display potential combinations of dishes: those misclassified or with output (sigmoid)  ∈  (0.45, 0.55).
+<b>Methodology</b>: Build, train and validate several custom and pretrained convolutional networks. Select the best model (highest validation accuracy) and display and save potential combinations of dishes: those misclassified or with output (sigmoid) ∈ (0.45, 0.55).
 
 <b> Input: </b> Two separated folders with pictures of each class. The example provided here uses a dataset with 402 pictures of sandwiches and 402 pictures of sushi
 
-Only the best model obtained is shown here: MobileNet with input size (224,224) pretrained with imagenet with a small fully connected classified trained and tuned for the input dataset.
+Only the best model obtained is shown here: MobileNet with input size (224,224) pretrained with Imagenet with a small fully connected classified trained and tuned for the input dataset.
 
 This implementation is largely influenced and reuses code from the following sources:
 
@@ -36,7 +36,7 @@ git clone https://github.com/angelmtenor/potential-dishes.git
 ```
 
 
-2. In the folder of the cloned respository, install the dependencies (Numpy, Matplotlib, Seaborn, Pillow, TensorFlow, and Keras):
+2. In the folder of the cloned repository, install the dependencies (Numpy, Matplotlib, Seaborn, Pillow, TensorFlow, and Keras):
 ``` sh 
 cd potential-dishes
 pip install -r requirements.txt
@@ -56,12 +56,17 @@ jupyter notebook potential_dishes.ipynb
 ```
 
 
-
-
 ## 4. Analysis and possible improvements
 
+The best model obtained, based on transfer learning with a pretrained MobileNet, achieves accuracies between 89-92% on the validation set. Less than 80% of accuracy was obtained with smaller custom convolutional models without transfer learning.
 
+The generator of the augmented images used to train is based on the fact that the dishes are usually centered and photographed from different angles.
 
+The potential dishes identified contain both actual potential combination and no combination at all. New potential dishes can be obtained by changing the 'SEED' parameter in the main script (different validation set).
+
+Better accuracies of the classifier can be obtained by fine-tuning the top layers of the pre-trained MobileNet network. However, it is likely that the identification of potential dishes does not improve. 
+
+Alternate advanced methods could include Style Transfer or using Generative Adversarial Networks for combining data, as in [RemixNet](https://ieeexplore.ieee.org/document/7889574)
 
 ## Creator
 
