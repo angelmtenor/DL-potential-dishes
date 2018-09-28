@@ -42,9 +42,13 @@ VALIDATION_DIR = "validation"
 OUTPUT_DIR = "output"  # potential dishes will be saved here
 
 # main parameters (already tuned)
+SEED = 0 # seed for random values (train-validation split, initial values of NN weigths ...)
 IMG_WIDTH, IMG_HEIGHT = 224, 224  # match with input sizes of pretrained network
 VALIDATION_SIZE = 0.3  # size the of validation set
 BATCH_SIZE = 32
+
+# show the graphs with the history of the training process of the classifier
+SHOW_TRAINING_PLOT = False
 
 
 def setup():
@@ -57,7 +61,7 @@ def setup():
     helper.info_gpu()
     sns.set_palette("Reds")
     # set reproducible results from run to run with Keras
-    helper.reproducible(seed=0)
+    helper.reproducible(seed=SEED)
 
     """ 1. Donwload and extract the pictures """
     # Download the pictures
@@ -75,7 +79,7 @@ def setup():
         print('Extracting data ... OK\n')
 
     # Print the number of pictures
-    print("pictures:")
+    print("\nPictures:")
     for c in CLASSES:
         path = os.path.join(DATA_DIR, c)
         print("{}   \t{}".format(
@@ -106,7 +110,7 @@ def setup():
             shutil.copyfile(src, dest)
 
     # Print the size of each set
-    print("\npictures:")
+    print("\nSets:")
     for d in (TRAIN_DIR, VALIDATION_DIR):
         for c in CLASSES:
             path = os.path.join(d, c)
@@ -114,7 +118,7 @@ def setup():
                 d, c,
                 len([n for n in os.listdir(path) if os.path.isfile(os.path.join(path, n))])))
 
-    print("\n setup .... OK \n")
+    print("\nsetup .... OK")
 
 
 def get_bottleneck(train_datagen, val_datagen):
@@ -127,7 +131,7 @@ def get_bottleneck(train_datagen, val_datagen):
         layer.trainable = False
 
     # Get bottleneck features
-    print('\n Image generators:')
+    print('\nImage generators:')
     train_bottleneck_generator = train_datagen.flow_from_directory(
         TRAIN_DIR,
         color_mode='rgb',
@@ -145,6 +149,8 @@ def get_bottleneck(train_datagen, val_datagen):
         class_mode=None,
         shuffle=False,
     )
+
+    print('\n Extracting bottleneck features:')
 
     train_bottleneck = model_bottleneck.predict_generator(
         train_bottleneck_generator, verbose=1)
@@ -172,6 +178,7 @@ def build_top_nn(input_shape, summary=False):
     model_top.add(Activation('sigmoid'))
 
     if summary:
+        print("Top classifier:")
         model_top.summary()
 
     model_top.compile(
@@ -195,7 +202,7 @@ def train_nn(model_top, train_bottleneck, val_bottleneck, train_labels, val_labe
     early = EarlyStopping(
         monitor='val_acc', min_delta=0, patience=50, verbose=0, mode='auto')
 
-    print('\n Training neural network....')
+    print('\nTraining neural network....')
     t0 = time()
 
     history = model_top.fit(
@@ -295,7 +302,7 @@ if __name__ == '__main__':
     model_top = build_top_nn(
         input_shape=train_bottleneck.shape[1:], summary=True)
     model_top = train_nn(model_top, train_bottleneck,
-                         val_bottleneck, train_labels, val_labels, show_plots=True)
+                         val_bottleneck, train_labels, val_labels, show_plots=SHOW_TRAINING_PLOT)
 
     # 5. Build the complete trained model, make predictions, and save potential dishes
     full_model = build_full_model(model_bottleneck, model_top)
