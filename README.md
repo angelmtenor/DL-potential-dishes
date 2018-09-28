@@ -1,4 +1,4 @@
- Deep Learning assignment: Identify potential combinations of dishes
+# Deep Learning assignment: Identify potential combinations of dishes
 
 ## 1 - Goal
 
@@ -66,9 +66,8 @@ The potential dishes identified contain both actual potential combination and no
 
 Better accuracies of the classifier can be obtained by fine-tuning the top layers of the pre-trained MobileNet network. However, it is likely that the identification of potential dishes does not improve. 
 
-Alternate advanced methods could include Style Transfer or using Generative Adversarial Networks for combining data, as in [RemixNet](https://ieeexplore.ieee.org/document/7889574)
+Alternate advanced methods could include Style Transfer or using Generative Adversarial Networks for combining data, as [RemixNet](https://ieeexplore.ieee.org/document/7889574).
 
-## Creator
+## Author
 
-* Angel Martínez-Tenor
-    - [https://github.com/angelmtenor](https://github.com/angelmtenor)
+* [Angel Martínez-Tenor](https://profile.angelmtenor.com/)
