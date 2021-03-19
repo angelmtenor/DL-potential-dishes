@@ -3,4 +3,4 @@ Keras==2.2.2
 matplotlib==2.2.3
 tensorflow>=1.12.1
 numpy==1.15.1
-Pillow==5.2.0
+Pillow>=8.1.1
