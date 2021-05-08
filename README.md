@@ -1,5 +1,10 @@
 # Deep Learning assignment: Identify potential combinations of dishes
 
+[Angel Martínez-Tenor](https://profile.angelmtenor.com/) 
+
+Created: September 2018 <br>
+Updated: May 2021
+
 ## 1 - Goal
 
 <b> This repository provides a small application in Python that identifies samples that could potentially be considered as a combination of two dishes given their pictures </b>
@@ -20,12 +25,12 @@ This implementation is largely influenced and reuses code from the following sou
 
 - [Angel Martínez-Tenor: 'Data science projects with Keras'](https://github.com/angelmtenor/data-science-keras) (setup, structure, and helper functions)
 
-## 3. How to run your code 
+## 3. How to run the code 
 
 ### Requirements
-- Python 3.6+
+- Python 3.6+  (conda environment suggested)
 
-Tested on Intel i5 CPU with and without GPU support (NVIDIA GTX 1060 6GB) running on Ubuntu 18.04
+*Tested on Intel i5/i7 CPUs with and without GPU support (NVIDIA GTX 1060 6GB) running on Ubuntu 18/20*
 
 
 ### Instructions
@@ -56,7 +61,7 @@ Tested on Intel i5 CPU with and without GPU support (NVIDIA GTX 1060 6GB) runnin
     ```
 
 
-## 4. Analysis and possible improvements
+## Analysis of results and & Future Work
 
 The best model obtained, based on transfer learning with a pretrained MobileNet, achieved accuracies between 89-92% on the validation set. Less than 80% of accuracy was obtained with smaller custom convolutional models without transfer learning.
 
@@ -67,7 +72,3 @@ The identified potential dishes contain both actual potential combination and no
 Better accuracies of the classifier can be obtained by training with a large dataset or by fine-tuning the top layers of the pre-trained MobileNet network. However, it is likely that the identification of potential dishes does not improve. 
 
 Alternate advanced methods could include Style Transfer or using Generative Adversarial Networks for combining data, as [RemixNet](https://ieeexplore.ieee.org/document/7889574).
-
-## Author
-
-* [Angel Martínez-Tenor](https://profile.angelmtenor.com/)
