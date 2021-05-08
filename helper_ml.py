@@ -1,11 +1,11 @@
 """
-Redcued helper module imported from the Data-Science-Keras repository
+Reduced Helper ml module adapted from the Data-Science-Keras repository
 """
 # import os, warnings
 # warnings.simplefilter(action="ignore", category=FutureWarning)
 
 import os
-import random as rn
+import random as python_random
 import numpy as np
 import matplotlib.pyplot as plt
 import tensorflow as tf
@@ -32,14 +32,10 @@ def reproducible(seed=0):
     """
 
     os.environ['PYTHONHASHSEED'] = '0'
+
     np.random.seed(seed)
-    rn.seed(seed)
-    # Multiple threads are a potential source of non-reproducible results.
-    session_conf = tf.ConfigProto(
-        intra_op_parallelism_threads=1, inter_op_parallelism_threads=1)
-    tf.set_random_seed(seed)
-    sess = tf.Session(graph=tf.get_default_graph(), config=session_conf)
-    keras.backend.set_session(sess)
+    python_random.seed(seed)
+    tf.random.set_seed(seed)
 
 
 def show_training(history):
@@ -64,11 +60,11 @@ def show_training(history):
     plt.ylabel('loss')
     plt.legend()
 
-    if 'acc' in hist:
+    if 'accuracy' in hist:
         plt.subplot(122)
-        plt.plot(hist['acc'], label='Training')
-        if 'val_acc' in hist:
-            plt.plot(hist['val_acc'], label='Validation')
+        plt.plot(hist['accuracy'], label='Training')
+        if 'val_accuracy' in hist:
+            plt.plot(hist['val_accuracy'], label='Validation')
         plt.xlabel('epoch')
         plt.ylabel('accuracy')
         plt.legend()
@@ -80,7 +76,7 @@ def show_training(history):
     print("\nTraining loss:  \t{:.4f}".format(hist['loss'][-1]))
     if 'val_loss' in hist:
         print("Validation loss: \t{:.4f}".format(hist['val_loss'][-1]))
-    if 'acc' in hist:
-        print("\nTraining accuracy: \t{:.3f}".format(hist['acc'][-1]))
-    if 'val_acc' in hist:
-        print("Validation accuracy:\t{:.3f}".format(hist['val_acc'][-1]))
+    if 'accuracy' in hist:
+        print("\nTraining accuracy: \t{:.3f}".format(hist['accuracy'][-1]))
+    if 'val_accuracy' in hist:
+        print("Validation accuracy:\t{:.3f}".format(hist['val_accuracy'][-1]))
