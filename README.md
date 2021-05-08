@@ -1,9 +1,11 @@
 # Deep Learning assignment: Identify potential combinations of dishes
 
+
 [Angel Martínez-Tenor](https://profile.angelmtenor.com/) 
 
-Created: September 2018 
+Created: September 2018 <br>
 Last Updated: May 2021 <br>
+ [Github](https://github.com/angelmtenor/DL-potential-dishes)
 
 
 ## 1 - Goal
