@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 """
+Use Case Main Library
 Technical Assignment: Combining two dishes
-Ángel Martínez-Tenor. September 25, 2018
 Goal: Get samples that could potentially be considered as a combination of Sandwich and Sushi
 
+Ángel Martínez-Tenor. September 2018
 """
 
 import os
@@ -58,7 +59,6 @@ def setup():
     Then split the data into training and validation sets and save them in separated folders
     """
 
-    print("\nsetup .... \n")
     helper_ml.info_gpu()
     sns.set_palette("Reds")
     # set reproducible results from run to run with Keras
