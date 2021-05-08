@@ -182,13 +182,14 @@ def build_top_nn(input_shape, summary=False):
 def train_nn(model_top, train_bottleneck, val_bottleneck, train_labels, val_labels, show_plots=False):
     """ Train the custom classifier (with the input bottleneck features) """
 
-    checkpoint = ModelCheckpoint("checkpoint-top.h5",
-                                 monitor='val_accuracy',
-                                 verbose=0,
-                                 save_best_only=True,
-                                 save_weights_only=False,
-                                 mode='auto',
-                                 save_freq=1)
+    checkpoint = ModelCheckpoint(
+        "checkpoint-top.h5",
+        monitor='val_accuracy',
+        verbose=0,
+        save_best_only=True,
+        save_weights_only=False,
+        mode='auto',
+    )
 
     early = EarlyStopping(monitor='val_accuracy', min_delta=0, patience=50, verbose=0, mode='auto')
 
