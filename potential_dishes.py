@@ -21,11 +21,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-import keras
-from keras.preprocessing.image import ImageDataGenerator
-from keras.models import Sequential, Model
-from keras.layers import Dropout, Flatten, Dense, MaxPooling2D, Conv2D, InputLayer, Activation
-from keras.callbacks import ModelCheckpoint, EarlyStopping
+from tensorflow.keras.models import Sequential, Model, load_model
+from tensorflow.keras.layers import Dropout, Flatten, Dense, MaxPooling2D, Conv2D, InputLayer, Activation
+from tensorflow.keras.callbacks import ModelCheckpoint, EarlyStopping
+from tensorflow.keras.applications import MobileNet
+from tensorflow.keras.optimizers import Adamax
+from tensorflow.keras.initializers import TruncatedNormal
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
 import helper_ml
 
@@ -82,8 +84,12 @@ def setup():
     print("\nPictures:")
     for c in CLASSES:
         path = os.path.join(DATA_DIR, c)
-        print("{}   \t{}".format(c,
-                                 len([name for name in os.listdir(path) if os.path.isfile(os.path.join(path, name))])))
+        print("{}   \t{}".format(
+            c,
+            len([
+                name for name in os.listdir(path)
+                if os.path.isfile(os.path.join(path, name))
+            ])))
     """ Split the data into training and validation sets (not enough data for 3 partitions) """
 
     # remove existing sets
@@ -103,7 +109,9 @@ def setup():
         train_val_split = int(len(files) * (VALIDATION_SIZE))
         for i, ix in enumerate(indices):
             src = files[ix]
-            dest = '{}/{}/{}'.format(VALIDATION_DIR if i < train_val_split else TRAIN_DIR, c, files[ix].split('/')[-1])
+            dest = '{}/{}/{}'.format(
+                VALIDATION_DIR if i < train_val_split else TRAIN_DIR, c,
+                files[ix].split('/')[-1])
             shutil.copyfile(src, dest)
 
     # Print the size of each set
@@ -111,7 +119,12 @@ def setup():
     for d in (TRAIN_DIR, VALIDATION_DIR):
         for c in CLASSES:
             path = os.path.join(d, c)
-            print("{} {}  {}".format(d, c, len([n for n in os.listdir(path) if os.path.isfile(os.path.join(path, n))])))
+            print("{} {}  {}".format(
+                d, c,
+                len([
+                    n for n in os.listdir(path)
+                    if os.path.isfile(os.path.join(path, n))
+                ])))
 
     print("\nsetup .... OK")
 
@@ -119,9 +132,9 @@ def setup():
 def get_bottleneck(train_datagen, val_datagen):
     """ Use a pretrained convolutional model to extract the bottleneck features """
 
-    model_bottleneck = keras.applications.MobileNet(weights='imagenet',
-                                                    include_top=False,
-                                                    input_shape=(IMG_HEIGHT, IMG_WIDTH, 3))
+    model_bottleneck = MobileNet(weights='imagenet',
+                                 include_top=False,
+                                 input_shape=(IMG_HEIGHT, IMG_WIDTH, 3))
 
     for layer in model_bottleneck.layers:
         layer.trainable = False
@@ -148,8 +161,10 @@ def get_bottleneck(train_datagen, val_datagen):
 
     print('\n Extracting bottleneck features:')
 
-    train_bottleneck = model_bottleneck.predict(train_bottleneck_generator, verbose=1)
-    val_bottleneck = model_bottleneck.predict(val_bottleneck_generator, verbose=1)
+    train_bottleneck = model_bottleneck.predict(train_bottleneck_generator,
+                                                verbose=1)
+    val_bottleneck = model_bottleneck.predict(val_bottleneck_generator,
+                                              verbose=1)
     train_labels = train_bottleneck_generator.classes
     val_labels = val_bottleneck_generator.classes
 
@@ -159,8 +174,12 @@ def get_bottleneck(train_datagen, val_datagen):
 def build_top_nn(input_shape, summary=False):
     """" Return the custom fully connected classifier """
 
-    w = keras.initializers.TruncatedNormal(mean=0.0, stddev=0.0001, seed=None)
-    opt = keras.optimizers.Adamax(lr=0.0001, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.0)
+    w = TruncatedNormal(mean=0.0, stddev=0.0001, seed=None)
+    opt = Adamax(learning_rate=0.0001,
+                 beta_1=0.9,
+                 beta_2=0.999,
+                 epsilon=None,
+                 decay=0.0)
 
     model_top = Sequential()
     model_top.add(Flatten(input_shape=input_shape))
@@ -174,12 +193,19 @@ def build_top_nn(input_shape, summary=False):
         print("Top classifier:")
         model_top.summary()
 
-    model_top.compile(optimizer=opt, loss='binary_crossentropy', metrics=['accuracy'])
+    model_top.compile(optimizer=opt,
+                      loss='binary_crossentropy',
+                      metrics=['accuracy'])
 
     return model_top
 
 
-def train_nn(model_top, train_bottleneck, val_bottleneck, train_labels, val_labels, show_plots=False):
+def train_nn(model_top,
+             train_bottleneck,
+             val_bottleneck,
+             train_labels,
+             val_labels,
+             show_plots=False):
     """ Train the custom classifier (with the input bottleneck features) """
 
     checkpoint = ModelCheckpoint(
@@ -191,7 +217,11 @@ def train_nn(model_top, train_bottleneck, val_bottleneck, train_labels, val_labe
         mode='auto',
     )
 
-    early = EarlyStopping(monitor='val_accuracy', min_delta=0, patience=50, verbose=0, mode='auto')
+    early = EarlyStopping(monitor='val_accuracy',
+                          min_delta=0,
+                          patience=50,
+                          verbose=0,
+                          mode='auto')
 
     print('\nTraining neural network....')
     t0 = time()
@@ -211,7 +241,7 @@ def train_nn(model_top, train_bottleneck, val_bottleneck, train_labels, val_labe
 
     # restore best model found (callback-checkpoint)
     model_top = None
-    model_top = keras.models.load_model("checkpoint-top.h5")
+    model_top = load_model("checkpoint-top.h5")
     acc = model_top.evaluate(val_bottleneck, val_labels, verbose=0)[1]
     print('\nBest model. Validation accuracy: \t {:.3f}'.format(acc))
 
@@ -222,9 +252,12 @@ def build_full_model(model_bottleneck, model_top):
     """ Build the full model (pretrained bottleneck + custom classifier) """
 
     # stack Layers using Keras's fucntional approach:
-    full_model = Model(inputs=model_bottleneck.input, outputs=model_top(model_bottleneck.output))
+    full_model = Model(inputs=model_bottleneck.input,
+                       outputs=model_top(model_bottleneck.output))
 
-    full_model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+    full_model.compile(optimizer='adam',
+                       loss='binary_crossentropy',
+                       metrics=['accuracy'])
 
     return full_model
 
@@ -257,7 +290,9 @@ def predict_and_save_potential_dishes(full_model, val_datagen):
 
         for im, l, p in zip(images, labels, predictions.flatten()):
             # if (p > 0.45 and p < 0.55):
-            if (p > 0.45 and p < 0.55) or (l < 0.5 and p > 0.5) or (l > 0.5 and p < 0.5):
+            if (p > 0.45 and p < 0.55) or (l < 0.5
+                                           and p > 0.5) or (l > 0.5
+                                                            and p < 0.5):
                 n = n + 1
                 plt.figure(figsize=(6, 6))
                 plt.imshow(im)
@@ -311,8 +346,12 @@ def plot_samples(size=18):
     print("pictures:")
     for c in ('sandwich', 'sushi'):
         path = os.path.join(DATA_DIR, c)
-        print("{}   \t{}".format(c,
-                                 len([name for name in os.listdir(path) if os.path.isfile(os.path.join(path, name))])))
+        print("{}   \t{}".format(
+            c,
+            len([
+                name for name in os.listdir(path)
+                if os.path.isfile(os.path.join(path, name))
+            ])))
 
 
 """    MAIN   """
@@ -330,7 +369,8 @@ if __name__ == '__main__':
         train_datagen, val_datagen)
 
     # 4. Build and train the top classifier
-    model_top = build_top_nn(input_shape=train_bottleneck.shape[1:], summary=True)
+    model_top = build_top_nn(input_shape=train_bottleneck.shape[1:],
+                             summary=True)
     model_top = train_nn(model_top,
                          train_bottleneck,
                          val_bottleneck,

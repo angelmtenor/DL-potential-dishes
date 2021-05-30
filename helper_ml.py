@@ -9,7 +9,7 @@ import random as python_random
 import numpy as np
 import matplotlib.pyplot as plt
 import tensorflow as tf
-import keras
+#import keras
 
 
 def info_gpu():
@@ -22,7 +22,7 @@ def info_gpu():
         print('{}'.format(tf.test.gpu_device_name()[1:]))
 
     # Check TensorFlow Version
-    print('Keras\t\tv{}'.format(keras.__version__))
+    print('Keras\t\tv{}'.format(tf.keras.__version__))
     print('TensorFlow\tv{}'.format(tf.__version__))
 
 

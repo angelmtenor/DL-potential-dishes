@@ -40,17 +40,22 @@ This implementation is largely influenced and reuses code from the following sou
 
 1. Clone the repository using `git`: 
     ``` 
-    git clone https://github.com/angelmtenor/potential-dishes.git
+    git clone https://github.com/angelmtenor/DL-potential-dishes.git
     ```
 
+2. Create a virtual/conda environment (optional): 
+    ```
+    conda create -n potential-dishes python=3.8
+    conda activate potential-dishes
+    ```
 
-2. In the folder of the cloned repository, install the dependencies (Numpy, Matplotlib, Seaborn, Pillow, TensorFlow, and Keras):
+3. In the folder of the cloned repository, install the dependencies (Numpy, Matplotlib, Seaborn, Pillow, TensorFlow, and Keras):
     ```  
-    cd potential-dishes
+    cd DL-potential-dishes
     pip install -r requirements.txt
     ```
 
-3. Run the main script:
+4. Run the main script:
     ```  
     python potential_dishes.py
     ```
