@@ -45,7 +45,7 @@ This implementation is largely influenced and reuses code from the following sou
 
 2. Create a virtual/conda environment (optional): 
     ```
-    conda create -n potential-dishes python=3.8
+    conda create -n potential-dishes python=3.9
     conda activate potential-dishes
     ```
 
