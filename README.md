@@ -4,7 +4,7 @@
 [Angel Martínez-Tenor](https://profile.angelmtenor.com/) 
 
 Created: September 2018 <br>
-Last Updated: May 2021 <br>
+Updated: May 2021 <br>
  [Github](https://github.com/angelmtenor/DL-potential-dishes)
 
 
