@@ -33,9 +33,6 @@ This implementation is largely influenced and reuses code from the following sou
 ### Requirements
 - Python 3.7+  (conda environment with Python 3.10 suggested)
 
-*Tested on Intel i5/i7 CPUs with and without GPU support running on Ubuntu 18/20/22*
-
-
 ### Instructions
 
 1. Clone the repository using `git`:
