@@ -26,7 +26,7 @@ from tensorflow.keras.initializers import TruncatedNormal
 from tensorflow.keras.layers import Activation, Dense, Dropout, Flatten
 from tensorflow.keras.models import Model, Sequential, load_model
 from tensorflow.keras.optimizers import Adamax
-from tensorflow.keras.preprocessing.image import ImageDataGenerator
+from tensorflow.keras.preprocessing.image import DirectoryIterator, ImageDataGenerator
 
 import helper_ml
 
@@ -54,7 +54,7 @@ BATCH_SIZE = 32
 SHOW_TRAINING_PLOT = False
 
 
-def setup():
+def setup() -> None:
     """
     Download and extract the pictures. Then split the data into training and validation sets and save them in separated
     folders
@@ -131,7 +131,7 @@ def setup():
     print("\nsetup .... OK")
 
 
-def get_bottleneck(train_datagen, val_datagen):
+def get_bottleneck(train_datagen: ImageDataGenerator, val_datagen: ImageDataGenerator) -> tuple:
     """Use a pre-trained convolutional model to extract the bottleneck features"""
 
     model_bottleneck = MobileNet(weights="imagenet", include_top=False, input_shape=(IMG_HEIGHT, IMG_WIDTH, 3))
@@ -169,7 +169,7 @@ def get_bottleneck(train_datagen, val_datagen):
     return model_bottleneck, train_bottleneck, val_bottleneck, train_labels, val_labels
 
 
-def build_top_nn(input_shape, summary=False):
+def build_top_nn(input_shape: tuple, summary: bool = False) -> Model:
     """ " Return the custom fully connected classifier"""
 
     w = TruncatedNormal(mean=0.0, stddev=0.0001, seed=None)
@@ -192,14 +192,7 @@ def build_top_nn(input_shape, summary=False):
     return model_top
 
 
-def train_nn(
-    model_top,
-    train_bottleneck,
-    val_bottleneck,
-    train_labels,
-    val_labels,
-    show_plots=False,
-):
+def train_nn(model_top: Model, train_bottleneck, val_bottleneck, train_labels, val_labels, show_plots: bool = False):
     """Train the custom classifier (with the input bottleneck features)"""
 
     checkpoint = ModelCheckpoint(
@@ -240,7 +233,7 @@ def train_nn(
     return model_top
 
 
-def build_full_model(model_bottleneck, model_top):
+def build_full_model(model_bottleneck: Model, model_top: Model) -> Model:
     """Build the full model (pre-trained bottleneck + custom classifier)"""
 
     # stack Layers using Keras's functional approach:
@@ -251,7 +244,7 @@ def build_full_model(model_bottleneck, model_top):
     return full_model
 
 
-def predict_and_save_potential_dishes(full_model, val_datagen):
+def predict_and_save_potential_dishes(full_model: Model, val_datagen: DirectoryIterator) -> None:
     """Make predictions of the validation set and save potential dishes"""
 
     # Potential dishes:  pictures misclassified or with output (sigmoid) between 0.45 and 0.55
@@ -289,8 +282,8 @@ def predict_and_save_potential_dishes(full_model, val_datagen):
     plt.close()
 
 
-def create_image_generators():
-    """Create image generators with data augmentation"""
+def create_image_generators() -> tuple[ImageDataGenerator, ImageDataGenerator]:
+    """Create image generators objects for  data augmentation"""
     train_datagen = ImageDataGenerator(
         rescale=1.0 / 255,
         shear_range=0.4,  # high change of perspective in this pictures
@@ -305,8 +298,15 @@ def create_image_generators():
 # -------- AUXILIARY FOR DEV / EDA  -----------
 
 
-def load_samples(path, size):
-    """load and return an array of images"""
+def load_samples(path: str, size: int) -> list[Image.Image]:
+    """load and return an array of n images (size) from the directory given by 'path
+    Args:
+        path (str): Path of the samples directory
+        size (int): Number of samples to load
+
+    Returns:
+        list[Image.Image]: List of samples loaded
+    """
     imagesList = os.listdir(path)
     samples = []
     for image in imagesList[:size]:
@@ -315,8 +315,11 @@ def load_samples(path, size):
     return samples
 
 
-def plot_samples(size=18):
-    """Plot some pictures of dishes of the dataset"""
+def plot_samples(size: int = 18) -> None:
+    """Plot n pictures of dishes of the dataset, being n the input parameter 'size'
+    Args:
+        size (int, optional): Number of samples to plot. Defaults to 18.
+    """
     for c in ("sandwich", "sushi"):
         path = os.path.join(DATA_DIR, c)
         imgs = load_samples(path, size)

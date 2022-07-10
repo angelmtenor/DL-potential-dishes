@@ -14,7 +14,7 @@ import tensorflow as tf
 # import keras
 
 
-def info_gpu():
+def info_gpu() -> None:
     """Show GPU device (if available), Keras version and Tensorflow version"""
 
     # Check for a GPU
@@ -28,7 +28,7 @@ def info_gpu():
     print(f"TensorFlow\tv{tf.__version__}")
 
 
-def reproducible(seed: int = 0):
+def reproducible(seed: int = 0) -> None:
     """Setup reproducible results from run to run using Keras
     https://keras.io/getting-started/faq/#how-can-i-obtain-reproducible-results-using-keras-during-development
     Args:
@@ -42,7 +42,7 @@ def reproducible(seed: int = 0):
     tf.random.set_seed(seed)
 
 
-def show_training(history: tf.keras.callbacks.History):
+def show_training(history: tf.keras.callbacks.History) -> None:
     """
     Print the final loss and plot its evolution in the training process fom a history object. The same applies to
     'validation loss', 'accuracy', and 'validation accuracy' if available
