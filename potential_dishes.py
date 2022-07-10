@@ -45,8 +45,8 @@ VALIDATION_DIR = "validation"
 OUTPUT_DIR = "output"  # potential dishes will be saved here
 
 # main parameters (already tuned)
-SEED = 0  # seed for random values (train-validation split, initial NN weigths ...)
-IMG_WIDTH, IMG_HEIGHT = 224, 224  # match with input sizes of pretrained network
+SEED = 0  # seed for random values (train-validation split, initial NN weights ...)
+IMG_WIDTH, IMG_HEIGHT = 224, 224  # match with input sizes of pre-trained network
 VALIDATION_SIZE = 0.3  # size the of validation set
 BATCH_SIZE = 32
 
@@ -132,7 +132,7 @@ def setup():
 
 
 def get_bottleneck(train_datagen, val_datagen):
-    """Use a pretrained convolutional model to extract the bottleneck features"""
+    """Use a pre-trained convolutional model to extract the bottleneck features"""
 
     model_bottleneck = MobileNet(weights="imagenet", include_top=False, input_shape=(IMG_HEIGHT, IMG_WIDTH, 3))
 
@@ -243,7 +243,7 @@ def train_nn(
 def build_full_model(model_bottleneck, model_top):
     """Build the full model (pre-trained bottleneck + custom classifier)"""
 
-    # stack Layers using Keras's fucntional approach:
+    # stack Layers using Keras's functional approach:
     full_model = Model(inputs=model_bottleneck.input, outputs=model_top(model_bottleneck.output))
 
     full_model.compile(optimizer="adam", loss="binary_crossentropy", metrics=["accuracy"])
