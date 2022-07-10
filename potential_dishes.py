@@ -17,9 +17,6 @@ import numpy as np
 import seaborn as sns
 from PIL import Image
 from pylab import gcf
-
-os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
-
 from tensorflow.keras.applications import MobileNet
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 from tensorflow.keras.initializers import TruncatedNormal
@@ -60,7 +57,7 @@ def setup() -> None:
     folders
     """
 
-    helper_ml.info_gpu()
+    helper_ml.info_system()
     sns.set_palette("Reds")
     # set reproducible results from run to run with Keras
     helper_ml.reproducible(seed=SEED)
