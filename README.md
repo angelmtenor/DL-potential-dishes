@@ -3,16 +3,16 @@
 
 [Angel Martínez-Tenor](https://profile.angelmtenor.com/) 
 
-Created: September 2018 <br>
-Updated: May 2021 <br>
- [Github](https://github.com/angelmtenor/DL-potential-dishes)
+September 2018 (last maintenance: July 2022) <br>
+
+ [Github repo](https://github.com/angelmtenor/DL-potential-dishes)
 
 
-## 1 - Goal
+## Goal
 
 <b> This repository provides a small application in Python that identifies samples that could potentially be considered as a combination of two dishes given their pictures </b>
 
-## 2. Description 
+## Description 
 
 <b>Methodology</b>: Build, train and validate several custom and pretrained convolutional networks. Select the best model (highest validation accuracy) and display and save potential combinations of dishes: those misclassified or with output (sigmoid) ∈ (0.45, 0.55).
 
@@ -28,12 +28,12 @@ This implementation is largely influenced and reuses code from the following sou
 
 - [Angel Martínez-Tenor: 'Data science projects with Keras'](https://github.com/angelmtenor/data-science-keras) (setup, structure, and helper functions)
 
-## 3. How to run the code 
+## How to run the code 
 
 ### Requirements
-- Python 3.6+  (conda environment suggested)
+- Python 3.7+  (conda environment with Python 3.10 suggested)
 
-*Tested on Intel i5/i7 CPUs with and without GPU support (NVIDIA GTX 1060 6GB) running on Ubuntu 18/20*
+*Tested on Intel i5/i7 CPUs with and without GPU support running on Ubuntu 18/20/22*
 
 
 ### Instructions
@@ -45,7 +45,7 @@ This implementation is largely influenced and reuses code from the following sou
 
 2. Create a virtual/conda environment (optional): 
     ```
-    conda create -n potential-dishes python=3.9
+    conda create -n potential-dishes python=3.10
     conda activate potential-dishes
     ```
 
@@ -54,6 +54,8 @@ This implementation is largely influenced and reuses code from the following sou
     cd DL-potential-dishes
     pip install -r requirements.txt
     ```
+
+    To install tensorflow with GPU support, follow the instructions of this guide: [Install TensorFlow GPU](https://www.tensorflow.org/install/pip#install_cuda_with_apt). Tested on both, pure Ubuntu 22 and Ubuntu 22 on WSL (Windows 11)
 
 4. Run the main script:
     ```  

@@ -4,3 +4,5 @@ Pillow==9.2.0
 seaborn==0.11.2
 tensorflow==2.9.1
 jupyter
+
+black
