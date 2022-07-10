@@ -21,11 +21,11 @@ def info_gpu():
     if not tf.test.gpu_device_name():
         print("-- No GPU  --")
     else:
-        print("{}".format(tf.test.gpu_device_name()[1:]))
+        print(f"{tf.test.gpu_device_name()[1:]}")
 
     # Check TensorFlow Version
-    print("Keras\t\tv{}".format(tf.keras.__version__))
-    print("TensorFlow\tv{}".format(tf.__version__))
+    print(f"Keras\t\tv{tf.keras.__version__}")
+    print(f"TensorFlow\tv{tf.__version__}")
 
 
 def reproducible(seed: int = 0):
