@@ -2,7 +2,6 @@
 # Update versions: 'pre-commit autoupdate'
 # Manual check: 'pre-commit run --all-files'
 # Angel Martinez Tenor - July 2022
-
 repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.3.0
