@@ -170,7 +170,7 @@ def build_top_nn(input_shape: tuple, summary: bool = False) -> Model:
     """ " Return the custom fully connected classifier"""
 
     w = TruncatedNormal(mean=0.0, stddev=0.0001, seed=None)
-    opt = Adamax(learning_rate=0.0001, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.0)
+    opt = Adamax(learning_rate=0.0001, beta_1=0.9, beta_2=0.999, epsilon=None) #  decay=0.0)
 
     model_top = Sequential()
     model_top.add(Flatten(input_shape=input_shape))
