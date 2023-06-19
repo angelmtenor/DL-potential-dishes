@@ -52,7 +52,7 @@ This implementation is largely influenced and reuses code from the following sou
     pip install -r requirements.txt
     ```
 
-    To install tensorflow with GPU support, follow the instructions of this guide: [Install TensorFlow GPU](https://www.tensorflow.org/install/pip#install_cuda_with_apt). 
+    To install tensorflow with GPU support, follow the instructions of this guide: [Install TensorFlow GPU](https://www.tensorflow.org/install/pip#install_cuda_with_apt).
 
 
 4. Run the main script:
@@ -60,7 +60,7 @@ This implementation is largely influenced and reuses code from the following sou
     python potential_dishes.py
     ```
 
-    
+
     Tested on both, pure Ubuntu 22 with no GPU and Ubuntu 22 with RTX 2080 on WSL (Windows 11), with similar performance and training time (small dataset with training time ~15s)
 
 ### Optional:
