@@ -19,7 +19,7 @@ import pkg_resources
 
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
 
-import tensorflow as tf
+import tensorflow as tf  # noqa: E402
 
 INSTALLED_PACKAGES = pkg_resources.working_set
 installed_packages_dict = {i.key: i.version for i in INSTALLED_PACKAGES}  # pylint: disable=not-an-iterable
