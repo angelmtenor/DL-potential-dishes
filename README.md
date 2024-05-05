@@ -3,7 +3,7 @@
 
 [Angel Martinez-Tenor](https://profile.angelmtenor.com/)
 
-September 2018 (last maintenance: July 2022) <br>
+September 2018 (last maintenance: May 2024 - Updated to Python 3.12) <br>
 
  [Github repo](https://github.com/angelmtenor/DL-potential-dishes)
 
@@ -31,7 +31,7 @@ This implementation is largely influenced and reuses code from the following sou
 ## How to run the code
 
 ### Requirements
-- Python 3.7+  (conda environment with Python 3.10 suggested)
+- Python 3.10+  (conda environment with Python 3.12 suggested)
 
 ### Instructions
 
@@ -42,7 +42,7 @@ This implementation is largely influenced and reuses code from the following sou
 
 2. Create a virtual/conda environment (optional):
     ```
-    conda create -n potential-dishes python=3.10
+    conda create -n potential-dishes python=3.12
     conda activate potential-dishes
     ```
 
@@ -62,6 +62,12 @@ This implementation is largely influenced and reuses code from the following sou
 
 
     Tested on both, pure Ubuntu 22 with no GPU and Ubuntu 22 with RTX 2080 on WSL (Windows 11), with similar performance and training time (small dataset with training time ~15s)
+
+### Contributions
+* Use Pre-commit hooks to ensure code quality. To run the checks manually:
+    ```
+    pre-commit run --all-files
+    ```
 
 ### Optional:
 * Change constants `SOURCE_FILE, DATA_FILE, DATA_DIR, CLASSES` on top of the main script to use another dataset with different dishes (2 classes only)

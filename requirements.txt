@@ -1,8 +1,9 @@
-jupyter
-matplotlib==3.5.2
-numpy==1.23.1
+jupyter>=1.0.0
+matplotlib>=3.8.4
+numpy>=1.26.4
 Pillow>=10.3.0
 pre-commit
-py-cpuinfo==8.0.0
-seaborn==0.11.2
-tensorflow==2.11.1
+py-cpuinfo
+scipy>=1.13.0
+seaborn
+tensorflow>=2.16.1

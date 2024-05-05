@@ -61,7 +61,6 @@ def setup() -> None:
     sns.set_palette("Reds")
     # set reproducible results from run to run with Keras
     helper_ml.reproducible(seed=SEED)
-    """ 1. Download and extract the pictures """
     # Download the pictures
     if not os.path.isfile(DATA_FILE):
         print("Downloading data ...")
@@ -86,7 +85,7 @@ def setup() -> None:
                 len([name for name in os.listdir(path) if os.path.isfile(os.path.join(path, name))]),
             )
         )
-    """ Split the data into training and validation sets (not enough data for 3 partitions) """
+    # Split the data into training and validation sets (not enough data for 3 partitions) """
 
     # remove existing sets
     for d in (TRAIN_DIR, VALIDATION_DIR):
@@ -171,7 +170,7 @@ def build_top_nn(input_shape: tuple, summary: bool = False) -> Model:
 
     w = TruncatedNormal(mean=0.0, stddev=0.001, seed=9)
     # opt = Adam(learning_rate=0.0001, beta_1=0.9, beta_2=0.999, epsilon=None) # decay=0.0)
-    opt = Adamax(lr=0.0001)
+    opt = Adamax(learning_rate=0.0001)
     model_top = Sequential()
     model_top.add(Flatten(input_shape=input_shape))
     model_top.add(Dense(16, kernel_initializer=w, bias_initializer="zeros"))
@@ -193,7 +192,7 @@ def train_nn(model_top: Model, train_bottleneck, val_bottleneck, train_labels, v
     """Train the custom classifier (with the input bottleneck features)"""
 
     checkpoint = ModelCheckpoint(
-        "checkpoint-top.h5",
+        "checkpoint-top.keras",
         monitor="val_accuracy",
         verbose=0,
         save_best_only=True,
@@ -223,7 +222,7 @@ def train_nn(model_top: Model, train_bottleneck, val_bottleneck, train_labels, v
 
     # restore best model found (callback-checkpoint)
     model_top = None
-    model_top = load_model("checkpoint-top.h5")
+    model_top = load_model("checkpoint-top.keras")
     acc = model_top.evaluate(val_bottleneck, val_labels, verbose=0)[1]
     print(f"\nBest model. Validation accuracy: \t {acc:.3f}")
 
